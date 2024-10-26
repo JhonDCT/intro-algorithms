@@ -2,14 +2,10 @@
 
 using namespace std;
 
-const int roadWidth = 80;    // Ancho de la carretera
-int anchoPista;              // Ancho del piso
-const int lanes = 5;         // Número de carriles
+int anchoPista;
 int cantidadCarriles;
-const int numCars = 15;      // Número de autos
 int cantidadAutos;
-char road[lanes][roadWidth]; // Representación de la carretera
-char carretera[cantidadCarriles][anchoPista];
+char carretera;
 
 void obtenerAnchoPista()
 {
@@ -53,78 +49,68 @@ void obtenerCantidadAutos()
     }
 }
 
-void crearCarretera() {
-    char carretera[cantidadCarriles][anchoPista];    
+void crearCarretera()
+{
+    carretera = carretera[&cantidadCarriles][&anchoPista];
 }
 
-struct TrafficLight
+struct Auto
 {
+    int carril;
     int position;
-    bool isGreen; // true para verde, false para rojo
+    char simbolo;
+    int velocidad;
 };
 
-struct Car
+void iniciarCarretera()
 {
-    int lane;
-    int position;
-    char symbol;
-    int speed;
-};
-
-// Inicializar la carretera vacía
-void initializeRoad()
-{
-    for (int i = 0; i < lanes; i++)
+    for (int i = 0; i < cantidadCarriles; i++)
     {
         for (int j = 0; j < anchoPista; j++)
         {
-            road[i][j] = ' ';
+            carretera[i][j] = ' ';
         }
     }
 }
 
-// Imprimir el estado actual de la carretera
-void printRoad(const vector<Car> &cars)
+void imprimirCarretera(const vector<Auto> &cars)
 {
-    initializeRoad();
+    iniciarCarretera();
 
     for (const auto &car : cars)
     {
-        road[car.lane][car.position] = car.symbol;
+        carretera[car.carril][car.position] = car.simbolo;
     }
 
-    // Imprimir carretera con autos
     for (int i = 0; i < cantidadCarriles; i++)
     {
         cout << "|";
         for (int j = 0; j < anchoPista; j++)
         {
-            cout << road[i][j];
+            cout << carretera[i][j];
         }
         cout << "|" << endl;
     }
-    cout << string(anchoPista + 2, '-') << endl; // Línea divisoria inferior
+    cout << string(anchoPista + 2, '-') << endl;
 }
 
-// Actualizar posiciones de los autos
-void updateCars(vector<Car> &cars)
+void actualizarAutos(vector<Auto> &cars)
 {
     for (auto &car : cars)
     {
         car.position++;
         if (car.position >= anchoPista)
         {
-            car.position = 0; // Auto regresa al principio si sale de la carretera
+            car.position = 0;
         }
     }
 }
 
-bool checkCollision(const Car &car1, const Car &car2)
+bool validarColision(const Auto &car1, const Auto &car2)
 {
-    return car1.lane == car2.lane && abs(car1.position - car2.position) <= 1;
+    return car1.carril == car2.carril && abs(car1.position - car2.position) <= 1;
 }
 
-void changeLane(Car &car, vector<Car> &cars)
+void cambiarCarril(Auto &car, vector<Auto> &cars)
 {
-    // Verificar si el carril de la izquierda o derecha está libre y mover el auto
 }
